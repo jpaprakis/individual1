@@ -64,9 +64,9 @@ return array(
 
 			'driver'    => 'mysql',
 			'host'      => '127.0.0.1',
-			'database'  => 'webcats',
-			'username'  => 'webcats',
-			'password'  => 'webcats',
+			'database'  => 'sparkup',
+			'username'  => 'sparkup',
+			'password'  => 'sparkup1234',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

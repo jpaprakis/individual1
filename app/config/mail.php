@@ -54,7 +54,7 @@ return array(
 	|
 	*/
 
-	'from' => array('address' => 'SynergySpace.Webcats@gmail.com', 'name' => 'SynergySpace'),
+	'from' => array('address' => 'SparkUpIdeas@gmail.com', 'name' => 'SparkUp'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return array(
 	|
 	*/
 
-	'username' => 'SynergySpace.Webcats@gmail.com',
+	'username' => 'SparkUpIdeas@gmail.com',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return array(
 	|
 	*/
 
-	'password' => 'webcatswebcats',
+	'password' => 'sparkup1234',
 
 	/*
 	|--------------------------------------------------------------------------

@@ -20,7 +20,7 @@ this is how we get values/variables from a model (which will be calling our data
 					
 		<section id ="photoSolo" class = "bodycontainer jumbotron">
 
-			<h1>Synergy is ready for <span id="you">YOU!</span></h1>	
+			<h1>INDIVIDUAL SITEEEEE </h1>	
 
 		@if (!Auth::guest())
 			<div name="UserID"><a href="/view_profile"> {{ $ID }}</div>
@@ -35,6 +35,8 @@ this is how we get values/variables from a model (which will be calling our data
 			</form>
 		@endif
 
+		<li><a href="/sparkhub">Spark Hub</a></li>
+		<li><a href="/createspark">Create your own spark</a></li>
 <!-- This link should appear below the login form -->
 
 		

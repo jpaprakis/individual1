@@ -78,12 +78,8 @@ class NewUserController extends BaseController {
     		$user->active = 0;
     		$user->save();
 
-    		$profile = new Profile;
-    		$profile->userID = $userID;
-    		$profile->save();
-
     		Mail::send('emails.auth.activate', array('link' => URL::route('account-activate', $code), 'userID' => $userID), function($message) use ($user) {
-    			$message->to($user->email, $user->userID)->subject('Activate your SynergySpace account');	
+    			$message->to($user->email, $user->userID)->subject('Activate your SparkUp account');	
     		});
 
     		return Redirect::to('/')
@@ -108,7 +104,7 @@ class NewUserController extends BaseController {
 			$user->code = '';
 
 			if ($user->save()) {
-				return Redirect::to('/')
+				return Redirect::to('/sparkhub')
 					->with('global', 'Your account has been activated! You may now sign in.');
 			}
 
