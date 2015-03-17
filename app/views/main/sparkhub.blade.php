@@ -18,7 +18,7 @@ $pag_ideas = $results->paginate(10);
     <?php foreach ($pag_ideas as $idea): ?>
         <p><?php echo $idea->title; ?>
         	<?php $ideaID=$idea->ideaID; ?>
-        	<a href ="/view_idea/<?php echo $spaceID ?>">View</a>
+        	<a href ="/view_idea/<?php echo $ideaID ?>">View</a>
     <?php endforeach; ?>
 </div>
 
