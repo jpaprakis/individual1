@@ -131,7 +131,7 @@ class NewUserController extends BaseController {
 		$code = $user->code;
 
     	Mail::send('emails.auth.activate', array('link' => URL::route('account-activate', $code), 'userID' => $id), function($message) use ($user) {
-    		$message->to($user->email, $user->userID)->subject('Activate your SynergySpace account');	
+    		$message->to($user->email, $user->userID)->subject('Activate your SparkUp account');	
     	});
 
     	return Redirect::to('/')
