@@ -76,6 +76,7 @@ Route::get('/createspark', array(
     'before' => 'auth|verified',
     'uses' => 'SparkController@onCreate'));
 
+Route::post('/createspark', 'SparkController@onCreate_Submit');
 
 
 

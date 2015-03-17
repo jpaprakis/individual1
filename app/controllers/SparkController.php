@@ -50,9 +50,10 @@ class SparkController extends BaseController {
     		$title = Input::get('name');
     		$description = Input::get('description');
     		$industry = Input::get('industry');
+    		$keyword = Input::get('keyword');
 
     		$check_duplicate = Idea::where('userID', '=', $userID)
-    			->where('tite', '=', $title)
+    			->where('title', '=', $title)
     			->first();
 
     		if (count($check_duplicate) > 0)
@@ -77,10 +78,28 @@ class SparkController extends BaseController {
 	    		$spark->ideaID = $concat;
 	  
 	    		//Saving into the database here
-	    		$space->save();
+	    		$spark->save();
+
+	    		//Removing any duplicate keyword values from the array
 
 	    		//Now saving the keywords, first split by semicolon
-	    		
+	    		$keyword_array = explode(";", $keyword);
+				
+	    		for ($i=0; $i < count($keyword_array); $i++)
+	    		{
+	    			//checking for keyword duplicates
+	    			$key_concat = $concat . trim($keyword_array[$i]);
+		    		$check_key_duplicate = Keyword::where('keywordID', '=', $key_concat)
+		    			->first();
+		    		if (count($check_key_duplicate) < 1)
+		    		{
+		    			$new_keyword = new Keyword;
+		    			$new_keyword->ideaID = $concat;
+		    			$new_keyword->keyword = trim($keyword_array[$i]);
+		    			$new_keyword->keywordID = $key_concat;
+		    			$new_keyword->save();
+		    		}
+	    		}
 
 				return Redirect::to('/mysparks')
 	    			->with('global', 'Your Spark has been posted!');
