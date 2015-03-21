@@ -78,7 +78,18 @@ Route::get('/createspark', array(
 
 Route::post('/createspark', 'SparkController@onCreate_Submit');
 
+Route::get('/mysparks', array(
+    'before' => 'auth|verified',
+    'uses' => 'SparkController@mySparks'));
 
+Route::get('/edit_idea/{space_ID}', array(
+    'before' => 'auth|verified',
+    'uses' => 'SparkController@onEdit',
+    'as' => 'IdeaEditor'));
+
+Route::post('/edit_idea/{space_ID}', array(
+    'before' => 'auth|verified',
+    'uses' => 'SparkController@onEditSubmit'));
 
 
 
@@ -105,10 +116,6 @@ Route::get('/create_listing', array(
 
 Route::post('/create_listing', 'SpaceController@onCreate_Submit');
 
-Route::get('/edit_listing/{space_ID}', array(
-    'before' => 'auth|verified',
-    'uses' => 'SpaceController@onEdit',
-    'as' => 'ListingEditor'));
 
 Route::post('/edit_listing/{space_ID}', array(
     'before' => 'auth|verified',

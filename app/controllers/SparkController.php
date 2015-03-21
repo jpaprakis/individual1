@@ -8,8 +8,12 @@ class SparkController extends BaseController {
 	//accessing view from views/main/index (specify by main.index)
 	public function getMain()
 	{
-		//pass the userID to the getProfile function
 		return View::make('main.sparkhub');
+	}
+
+	public function mySparks()
+	{
+		return View::make('main.mysparks');
 	}
 
 
@@ -113,77 +117,96 @@ class SparkController extends BaseController {
 		return View::make('main.view_listings', array('passedID'=>$ID));
 	}
 
-	public function onEdit($Space_ID)
+	public function onEdit($SparkID)
 	{
-		$decode_ID = urldecode($Space_ID);
+		$decode_ID = urldecode($SparkID);
 		//edit a single listing
-		return View::make('main.edit_space', array('space'=>Space::where('concat_ID', '=', $decode_ID)->first()));
+
+		$spark_toedit = Idea::where('ideaID', '=', $decode_ID)->first();
+
+		$all_keywords = Keyword::where('ideaID', '=', $spark_toedit->ideaID)->get();
+
+		$keyword_string = $all_keywords[0]->keyword;
+
+		for ($i=1; $i < count($all_keywords); $i++)
+		{
+			$keyword_string = $keyword_string . "; " . $all_keywords[$i]->keyword;	
+		}
+
+		return View::make('main.editspark', array('spark'=>$spark_toedit, 'keystring'=>$keyword_string));
 	}
 
 	public function onEditSubmit()
 	{
 
 		$rules = array(
- 		    'space_name' => 'required',
 		   	'description' => 'required',
-		   	'price' => 'required|integer',
-		   	'price_type' => 'required'
+		   	'industry' => 'required',
+		   	'keyword' => 'required'
 		);
 
 		// create custom validation messages
 		$messages = array(
-			'required' => 'You must enter the :attribute of the space',
-			'integer' => 'Please only enter a number in the :attribute field'
+			'required' => 'You must enter the :attribute of your Spark!'
 		);
 
 		$validator = Validator::make(Input::all(), $rules, $messages);
 		
-		$concat_ID = Input::get('concat_ID');
+	    //Find the existing spark from the databas
+	    $SparkID = Input::get('SparkID');
+	    $foundspark = Idea::where('ideaID', '=', $SparkID);
+		$spark = $foundspark->first();
+				
 
 		if ($validator->fails())
     	{
     		$messages = $validator->messages();
     		Log::info('Validator fail.');
-        	return Redirect::route('ListingEditor', array($concat_ID))
+        	return Redirect::route('IdeaEditor', array($SparkID))
         		->withErrors($validator, 'edit');
     	}
 
     	else
     	{
-			$foundspace = Space::where('concat_ID', '=', $concat_ID);
-			$space = $foundspace->first();
+	    		Log::info('Validator pass.');
+	    		
+	    		$description = Input::get('description');
+	    		$industry = Input::get('industry');
+	    		$keyword = Input::get('keyword');
 
-			$space_name = Input::get('space_name');
-			$description = Input::get('description');
-			$looking_for = Input::get('looking_for');
-	    	$price = Input::get('price');
-	    	$price_type = Input::get('price_type');
-			$additional_info = Input::get('additional_info');
-			$new_concat_ID = $space->userID . $space_name . $space->address . $space->suite;
-
-			$check_duplicate = Space::where('concat_ID', '=', $new_concat_ID)
-				->where('created_at', '!=', $space->created_at)
-				->first();
-
-			if (count($check_duplicate) > 0)
-			{
-				return Redirect::route('ListingEditor', array($concat_ID))
-					->with('global', 'You have already listed a space at this address with the same name');
-			}
+	    		$spark->description = $description;
+	    		$spark->industry = $industry;
+	  
+	    		//Saving into the database here
+	    		$spark->save();
 
 
-	    	$space->space_name = $space_name;
-	    	$space->description = $description;
-	    	$space->looking_for = $looking_for;
-	    	$space->price = $price;
-	    	$space->price_type = $price_type;
-	    	$space->additional_info = $additional_info;
-	    	$space->concat_ID = $new_concat_ID;
+	    		//First delete all keyword entries for this idea
+	    		//so that we can re-enter them with the edited keywords
+	    		Keyword::where('ideaID', '=', $SparkID)->delete();
 
-	    	$space->save();
+	    		//Removing any duplicate keyword values from the array
 
-	    	return Redirect::to('/my_listings')
-	    		->with('global', 'Your changes have been saved!');
+	    		//Now saving the keywords, first split by semicolon
+	    		$keyword_array = explode(";", $keyword);
+				
+	    		for ($i=0; $i < count($keyword_array); $i++)
+	    		{
+	    			//checking for keyword duplicates
+	    			$key_concat = $concat . trim($keyword_array[$i]);
+		    		$check_key_duplicate = Keyword::where('keywordID', '=', $key_concat)
+		    			->first();
+		    		if (count($check_key_duplicate) < 1)
+		    		{
+		    			$new_keyword = new Keyword;
+		    			$new_keyword->ideaID = $concat;
+		    			$new_keyword->keyword = trim($keyword_array[$i]);
+		    			$new_keyword->keywordID = $key_concat;
+		    			$new_keyword->save();
+		    		}
+	    		}
+	    		return Redirect::to('/mysparks')
+	    			->with('global', 'Your Spark has been edited!');
 		}
 	}
 

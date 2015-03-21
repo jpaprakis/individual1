@@ -9,7 +9,7 @@
 //get the authenticated userID
 $id = Auth::id();
 //allow 10 sparks per page (can be adjusted once we format this)
-$pag_ideas = Ideas::where('userID', '=', $id)->orderBy('created_at', 'DESC')->paginate(10); 
+$pag_ideas = Idea::where('userID', '=', $id)->orderBy('created_at', 'DESC')->paginate(10); 
 ?>
 
 <div class="container">
@@ -23,5 +23,5 @@ $pag_ideas = Ideas::where('userID', '=', $id)->orderBy('created_at', 'DESC')->pa
 
 <?php echo $pag_ideas->links(); ?>
 
-<p><a href="/create_idea">Create a New Listing</a></p>
+<p><a href="/createspark">Create a New Spark</a></p>
 
