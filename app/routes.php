@@ -99,9 +99,17 @@ Route::get('/view_idea/{sparkID}', array(
     'before' => 'auth|verified',
     'uses' => 'SparkController@onView'));
 
-Route::get('/rate/{sparkID}/{upOrDown}', array(
+Route::post('/individual/{sparkID}/{upOrDown}', array(
     'before' => 'auth|verified',
     'uses' => 'RatingController@onRate'));
+
+Route::post('/sparkhub', array(
+    'before' => 'auth|verified',
+    'uses' => 'SparkController@onFilter'));
+
+Route::get('/clear_filters', array(
+    'before' => 'auth|verified',
+    'uses' => 'SparkController@clearFilter'));
 
 
 

@@ -251,4 +251,53 @@ class SparkController extends BaseController {
 		return Redirect::to('/mysparks')
 	    	->with('global', 'Your Spark has been successfully deleted');
 	}
+
+	public function onFilter()
+	{
+		$filter_type = Input::get('filter_type');
+    	$filter_item = Input::get('filter_value');
+		
+		$order_type = Input::get('order_type');
+    	$order_AorD = Input::get('order_AorD');
+
+    	//they picked a filter and a value for it
+    	if(($filter_type != "default_filter") && ($filter_item != NULL)) 
+		{
+			//Filtering by industry
+			if($filter_type == "industry_filter")
+			{
+				$filtered_results = Idea::where('industry', '=', $filter_item)->get();	
+			}
+			//Filtering by keyword
+			else
+			{
+				//Find all the ideaID's of keywords that match from keyword table
+				$filtered_results = DB::table('ideas')
+					->join('keywords', 'ideas.ideaID', '=', 'keywords.ideaID')
+					->where('keywords.keyword', '=', $filter_item)->get(['ideas*']);
+			}
+		}
+		//They didn''t pick a filter, get everything
+		else
+		{
+			$filtered_results = Idea::get();
+		}
+
+		
+
+
+		$results = NULL;
+		return Redirect::to('/sparkhub')
+			->with('orderedResults', $results);
+	}
+
+
+	public function clearFilter()
+	{
+		$results = NULL;
+		return Redirect::to('/sparkhub')
+			->with('orderedResults', $results);
+	}
+
+
 }
