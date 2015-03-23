@@ -27,8 +27,9 @@ $pag_ideas = $results->paginate(10);
 			
 			<!--If the sparks belong to someone else, can rate them-->
 			@else
-				<a href ="/rate_up/<?php echo $ideaID ?>">Light</a>
-				<a href ="/rate_down/<?php echo $ideaID ?>">Extinguish</a>
+                <!--ADD LOGIC HERE TO ONLY ALLOW RATINGS IF NOT ALREADY RATED, & SHOW A DIFF COLOUR IF ALRDY RATED-->
+				<a href ="/rate/<?php echo $ideaID ?>/1">Light</a>
+				<a href ="/rate/<?php echo $ideaID ?>/-1">Extinguish</a>
 			@endif </p>
 
     

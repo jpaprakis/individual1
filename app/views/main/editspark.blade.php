@@ -5,7 +5,7 @@
 <div class="withMsg">{{ $global }}</div>
 
 
-<p><a href="/my_listings">Go back to my Sparks</a></p>
+<p><a href="/mysparks">Go back to my Sparks</a></p>
 
 <div>
 	Editing Idea:<br />
@@ -27,12 +27,11 @@
 					<option <?php if($spark->industry == 'Travel'){echo("selected");}?> value="Trvel">Travel</option>
 		</select> <?php echo $errors->create->first('industry'); ?><br />
 		<div>
-			<name="keywords">Keywords:
-			<input type="text" size="30" maxlength="60" name="price" value="{{ $keystring }}" /> <?php echo $errors->edit->first('keywords'); ?> <br />
+			<name="keyword">Keywords:
+			<input type="text" size="30" maxlength="60" name="keyword" value="{{ $keystring }}" /> <?php echo $errors->edit->first('keyword'); ?> <br />
 		</div>
-<!--		<input type="hidden" name="concat_ID" value="{{ $spark->concat_ID }}"> -->
 		<input type="submit" value="Submit Changes"/>
-		<input type="hidden" name="SparkID" value={{$spark->ideaID}}/>
+		<input type="hidden" name="SparkID" value="{{ $spark->ideaID }}/>
 
 	</div>
 </form>

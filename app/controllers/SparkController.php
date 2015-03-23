@@ -78,7 +78,8 @@ class SparkController extends BaseController {
 	    		$spark->industry = $industry;
 	    	
 	       		//this is the primary key for the table, since the combination of these things needs to be unique
-	    		$concat =  $userID . $title;
+	    		$pre_concat =  $userID . $title;
+	    		$concat = preg_replace('/\s/', '_', $pre_concat);
 	    		$spark->ideaID = $concat;
 	  
 	    		//Saving into the database here
@@ -92,7 +93,8 @@ class SparkController extends BaseController {
 	    		for ($i=0; $i < count($keyword_array); $i++)
 	    		{
 	    			//checking for keyword duplicates
-	    			$key_concat = $concat . trim($keyword_array[$i]);
+	    			$pre_key_concat = $concat . trim($keyword_array[$i]);
+	    			$key_concat = preg_replace('/\s/', '_', $pre_key_concat);
 		    		$check_key_duplicate = Keyword::where('keywordID', '=', $key_concat)
 		    			->first();
 		    		if (count($check_key_duplicate) < 1)
@@ -111,26 +113,48 @@ class SparkController extends BaseController {
 		}
 	}
 
-	public function onView($ID)
+	public function onView($SparkID)
 	{
-		//this is the function to display another users' listings, pass in $ID of user
-		return View::make('main.view_listings', array('passedID'=>$ID));
+		//this is the function to display a spark, pass in the SparkID
+
+		$spark_toview = Idea::where('ideaID', '=', $SparkID)->first();
+
+		$all_keywords = Keyword::where('ideaID', '=', $SparkID)->get();
+
+		if (sizeof($all_keywords) > 0)
+		{
+			$keyword_string = $all_keywords[0]->keyword;
+			for ($i=1; $i < count($all_keywords); $i++)
+			{
+				$keyword_string = $keyword_string . "; " . $all_keywords[$i]->keyword;	
+			}
+		}
+		else 
+		{
+			$keyword_string = "";
+		}
+
+		return View::make('main.viewspark', array('spark'=>$spark_toview, 'keystring'=>$keyword_string));
 	}
 
 	public function onEdit($SparkID)
 	{
-		$decode_ID = urldecode($SparkID);
 		//edit a single listing
+		$spark_toedit = Idea::where('ideaID', '=', $SparkID)->first();
 
-		$spark_toedit = Idea::where('ideaID', '=', $decode_ID)->first();
+		$all_keywords = Keyword::where('ideaID', '=', $SparkID)->get();
 
-		$all_keywords = Keyword::where('ideaID', '=', $spark_toedit->ideaID)->get();
-
-		$keyword_string = $all_keywords[0]->keyword;
-
-		for ($i=1; $i < count($all_keywords); $i++)
+		if (sizeof($all_keywords) > 0)
 		{
-			$keyword_string = $keyword_string . "; " . $all_keywords[$i]->keyword;	
+			$keyword_string = $all_keywords[0]->keyword;
+			for ($i=1; $i < count($all_keywords); $i++)
+			{
+				$keyword_string = $keyword_string . "; " . $all_keywords[$i]->keyword;	
+			}
+		}
+		else 
+		{
+			$keyword_string = "";
 		}
 
 		return View::make('main.editspark', array('spark'=>$spark_toedit, 'keystring'=>$keyword_string));
@@ -152,7 +176,7 @@ class SparkController extends BaseController {
 
 		$validator = Validator::make(Input::all(), $rules, $messages);
 		
-	    //Find the existing spark from the databas
+	    //Find the existing spark from the database
 	    $SparkID = Input::get('SparkID');
 	    $foundspark = Idea::where('ideaID', '=', $SparkID);
 		$spark = $foundspark->first();
@@ -193,13 +217,14 @@ class SparkController extends BaseController {
 	    		for ($i=0; $i < count($keyword_array); $i++)
 	    		{
 	    			//checking for keyword duplicates
-	    			$key_concat = $concat . trim($keyword_array[$i]);
+	    			$pre_key_concat = $SparkID . trim($keyword_array[$i]);
+	    			$key_concat = preg_replace('/\s/', '_', $pre_key_concat);
 		    		$check_key_duplicate = Keyword::where('keywordID', '=', $key_concat)
 		    			->first();
 		    		if (count($check_key_duplicate) < 1)
 		    		{
 		    			$new_keyword = new Keyword;
-		    			$new_keyword->ideaID = $concat;
+		    			$new_keyword->ideaID = $SparkID;
 		    			$new_keyword->keyword = trim($keyword_array[$i]);
 		    			$new_keyword->keywordID = $key_concat;
 		    			$new_keyword->save();
@@ -210,20 +235,20 @@ class SparkController extends BaseController {
 		}
 	}
 
-	public function onDelete($Space_ID)
+	public function onDelete($SparkID)
 	{
-		//A user can delete one of their space listings
-		$decode_ID = urldecode($Space_ID);
-		$toDelete = Space::where('concat_ID', '=', $decode_ID)
+		//A user can delete one of their Sparks
+		$decode_ID = urldecode($SparkID);
+		$ideaToDelete = Idea::where('ideaID', '=', $SparkID)
 			->first()->delete();
 
-		return Redirect::to('/my_listings')
-	    	->with('global', 'Your space has been successfully deleted');
-	}
+		$keywordsToDelete = Keyword::where('ideaID', '=', $SparkID)
+			->delete();
 
-	public function onSingleView()
-	{
-		//view a single listing (likely through search functionality)
-	}
+		$ratingsToDelete = Rating::where('ideaID', '=', $SparkID)
+			->delete();
 
+		return Redirect::to('/mysparks')
+	    	->with('global', 'Your Spark has been successfully deleted');
+	}
 }

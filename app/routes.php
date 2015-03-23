@@ -82,14 +82,26 @@ Route::get('/mysparks', array(
     'before' => 'auth|verified',
     'uses' => 'SparkController@mySparks'));
 
-Route::get('/edit_idea/{space_ID}', array(
+Route::get('/edit_idea/{sparkID}', array(
     'before' => 'auth|verified',
     'uses' => 'SparkController@onEdit',
     'as' => 'IdeaEditor'));
 
-Route::post('/edit_idea/{space_ID}', array(
+Route::post('/edit_idea/{sparkID}', array(
     'before' => 'auth|verified',
     'uses' => 'SparkController@onEditSubmit'));
+
+Route::get('/delete_idea/{sparkID}', array(
+    'before' => 'auth|verified',
+    'uses' => 'SparkController@onDelete'));
+
+Route::get('/view_idea/{sparkID}', array(
+    'before' => 'auth|verified',
+    'uses' => 'SparkController@onView'));
+
+Route::get('/rate/{sparkID}/{upOrDown}', array(
+    'before' => 'auth|verified',
+    'uses' => 'RatingController@onRate'));
 
 
 
@@ -120,10 +132,6 @@ Route::post('/create_listing', 'SpaceController@onCreate_Submit');
 Route::post('/edit_listing/{space_ID}', array(
     'before' => 'auth|verified',
     'uses' => 'SpaceController@onEditSubmit'));
-
-Route::get('/delete_listing/{space_ID}', array(
-    'before' => 'auth|verified',
-    'uses' => 'SpaceController@onDelete'));
 
 Route::get('/contact_us', array(
  'uses' => 'ContactController@getMain'));
