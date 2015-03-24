@@ -4,6 +4,17 @@
 //ready saying when it's ready, execute code inside
 
 function vote_up(ideaID) {
-	alert(JSON.stringify(ideaID));
-	$.post(ideaID + "/1");
+	$.post("/ratings/" + ideaID + "/1", function(data){
+		successHandler(data);
+	});
+}
+
+function vote_down(ideaID) {
+	$.post("/ratings/" + ideaID + "/-1", function(data){
+		successHandler(data);
+	});
+}
+
+function successHandler(data){
+	console.log(data);
 }

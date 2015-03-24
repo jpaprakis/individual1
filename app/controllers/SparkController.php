@@ -76,11 +76,6 @@ class SparkController extends BaseController {
 	    		$spark->userID = $userID;
 	    		$spark->description = $description;
 	    		$spark->industry = $industry;
-	    	
-	       		//this is the primary key for the table, since the combination of these things needs to be unique
-	    		$pre_concat =  $userID . $title;
-	    		$concat = preg_replace('/\s/', '_', $pre_concat);
-	    		$spark->ideaID = $concat;
 	  
 	    		//Saving into the database here
 	    		$spark->save();
@@ -93,16 +88,14 @@ class SparkController extends BaseController {
 	    		for ($i=0; $i < count($keyword_array); $i++)
 	    		{
 	    			//checking for keyword duplicates
-	    			$pre_key_concat = $concat . trim($keyword_array[$i]);
-	    			$key_concat = preg_replace('/\s/', '_', $pre_key_concat);
-		    		$check_key_duplicate = Keyword::where('keywordID', '=', $key_concat)
+		    		$check_key_duplicate = Keyword::where('keyword', '=', $keyword_array[$i])
+		    			->where('ideaID', '=', $spark->id)
 		    			->first();
 		    		if (count($check_key_duplicate) < 1)
 		    		{
 		    			$new_keyword = new Keyword;
-		    			$new_keyword->ideaID = $concat;
+		    			$new_keyword->ideaID = $spark->id;
 		    			$new_keyword->keyword = trim($keyword_array[$i]);
-		    			$new_keyword->keywordID = $key_concat;
 		    			$new_keyword->save();
 		    		}
 	    		}
@@ -117,7 +110,7 @@ class SparkController extends BaseController {
 	{
 		//this is the function to display a spark, pass in the SparkID
 
-		$spark_toview = Idea::where('ideaID', '=', $SparkID)->first();
+		$spark_toview = Idea::where('id', '=', $SparkID)->first();
 
 		$all_keywords = Keyword::where('ideaID', '=', $SparkID)->get();
 
@@ -140,7 +133,7 @@ class SparkController extends BaseController {
 	public function onEdit($SparkID)
 	{
 		//edit a single listing
-		$spark_toedit = Idea::where('ideaID', '=', $SparkID)->first();
+		$spark_toedit = Idea::where('id', '=', $SparkID)->first();
 
 		$all_keywords = Keyword::where('ideaID', '=', $SparkID)->get();
 
@@ -178,7 +171,7 @@ class SparkController extends BaseController {
 		
 	    //Find the existing spark from the database
 	    $SparkID = Input::get('SparkID');
-	    $foundspark = Idea::where('ideaID', '=', $SparkID);
+	    $foundspark = Idea::where('id', '=', $SparkID);
 		$spark = $foundspark->first();
 				
 
@@ -217,16 +210,14 @@ class SparkController extends BaseController {
 	    		for ($i=0; $i < count($keyword_array); $i++)
 	    		{
 	    			//checking for keyword duplicates
-	    			$pre_key_concat = $SparkID . trim($keyword_array[$i]);
-	    			$key_concat = preg_replace('/\s/', '_', $pre_key_concat);
-		    		$check_key_duplicate = Keyword::where('keywordID', '=', $key_concat)
+	   		    		$check_key_duplicate = Keyword::where('keyword', '=', $keyword_array[$i])
+		    			->where('ideaID', '=', $SparkID)
 		    			->first();
 		    		if (count($check_key_duplicate) < 1)
 		    		{
 		    			$new_keyword = new Keyword;
 		    			$new_keyword->ideaID = $SparkID;
 		    			$new_keyword->keyword = trim($keyword_array[$i]);
-		    			$new_keyword->keywordID = $key_concat;
 		    			$new_keyword->save();
 		    		}
 	    		}
@@ -239,7 +230,7 @@ class SparkController extends BaseController {
 	{
 		//A user can delete one of their Sparks
 		$decode_ID = urldecode($SparkID);
-		$ideaToDelete = Idea::where('ideaID', '=', $SparkID)
+		$ideaToDelete = Idea::where('id', '=', $SparkID)
 			->first()->delete();
 
 		$keywordsToDelete = Keyword::where('ideaID', '=', $SparkID)
@@ -273,8 +264,8 @@ class SparkController extends BaseController {
 			{
 				//Find all the ideaID's of keywords that match from keyword table
 				$filtered_results = DB::table('ideas')
-					->join('keywords', 'ideas.ideaID', '=', 'keywords.ideaID')
-					->where('keywords.keyword', '=', $filter_item)->get(['ideas*']);
+					->join('keywords', 'ideas.id', '=', 'keywords.ideaID')
+					->where('keywords.keyword', '=', $filter_item)->get(['ideas.*']);
 			}
 		}
 		//They didn''t pick a filter, get everything

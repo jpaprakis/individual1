@@ -54,7 +54,7 @@ $pag_ideas = $results->paginate(10);
 <div class="container">
     <?php foreach ($pag_ideas as $idea): ?>
         <p><?php echo $idea->title; ?>
-        	<?php $ideaID=$idea->ideaID; ?>
+        	<?php $ideaID=$idea->id; ?>
         	<a href ="/view_idea/<?php echo $ideaID ?>">View</a>
         	<!--Can view and edit your own sparks, even on the hub page-->
         	@if ($idea->userID === $id)
@@ -63,14 +63,10 @@ $pag_ideas = $results->paginate(10);
 			
 			<!--If the sparks belong to someone else, can rate them-->
 			@else
-                <!--ADD LOGIC HERE TO ONLY ALLOW RATINGS IF NOT ALREADY RATED, & SHOW A DIFF COLOUR IF ALRDY RATED-->
-                <p id="upvote" value="<?php echo json_encode($ideaID) ?>" onclick="vote_up()">Light</p>   
-                <p onclick="vote_down(<?php echo $ideaID ?>)">Extinguish</p>
+                <!--ADD LOGIC HERE TO SHOW A DIFF COLOUR IF ALRDY RATED-->
+                <p id="upvote" onclick="vote_up('{{ $ideaID }}')">Light</p>   
+                <p id="downvote" onclick="vote_down('{{ $ideaID }}')">Extinguish</p>
 
-                <!--
-				<a href ="/rate/<?php echo $ideaID ?>/1">Light</a>
-				<a href ="/rate/<?php echo $ideaID ?>/-1">Extinguish</a>
-                -->
 			@endif </p>
 
     

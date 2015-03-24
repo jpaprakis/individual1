@@ -31,7 +31,7 @@
 			<input type="text" size="30" maxlength="60" name="keyword" value="{{ $keystring }}" /> <?php echo $errors->edit->first('keyword'); ?> <br />
 		</div>
 		<input type="submit" value="Submit Changes"/>
-		<input type="hidden" name="SparkID" value="{{ $spark->ideaID }}"/>
+		<input type="hidden" name="SparkID" value="{{ $spark->id }}"/>
 
 	</div>
 </form>

@@ -15,7 +15,7 @@ $pag_ideas = Idea::where('userID', '=', $id)->orderBy('created_at', 'DESC')->pag
 <div class="container">
     <?php foreach ($pag_ideas as $idea): ?>
         <p><?php echo $idea->title; ?>
-        	<?php $ideaID=$idea->ideaID; ?>
+        	<?php $ideaID=$idea->id; ?>
         	<a href ="/edit_idea/<?php echo $ideaID ?>">Edit</a>
         	<a href ="/delete_idea/<?php echo $ideaID ?>">Delete</a></p>
     <?php endforeach; ?>

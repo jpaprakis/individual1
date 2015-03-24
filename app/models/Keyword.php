@@ -17,8 +17,14 @@ class Keyword extends Eloquent {
 
 	//also need to display spaces where user is a landlord or tenant, but will do this by cross-referencing 
 	//those specific tables
-	protected $hidden = array('keywordID','ideaID','keyword');
-	protected $primaryKey = 'keywordID';
+	protected $hidden = array('id','ideaID','keyword');
+	protected $primaryKey = 'id';
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+	public $incrementing = true;
 
 	public static function getIdeasByKeyword($keyword)
 	{

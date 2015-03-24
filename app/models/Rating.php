@@ -17,8 +17,8 @@ class Rating extends Eloquent {
 
 	//also need to display spaces where user is a landlord or tenant, but will do this by cross-referencing 
 	//those specific tables
-	protected $hidden = array('ratingID','ideaID','raterID', 'rating');
-	protected $primaryKey = 'ratingID';
+	protected $hidden = array('id','ideaID','raterID', 'rating');
+	protected $primaryKey = 'id';
 
 	public static function getIdeaRatings($ID)
 	{
