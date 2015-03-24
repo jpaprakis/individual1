@@ -69,6 +69,7 @@ Route::get('/create_user/activate/{code}', array(
     'uses' => 'NewUserController@getActivate'));
 
 Route::get('/sparkhub', array(
+    'as' => 'sparkhub-search',
     'before' => 'auth|verified', 
     'uses' => 'SparkController@getMain'));
 

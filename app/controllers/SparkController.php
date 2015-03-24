@@ -8,7 +8,60 @@ class SparkController extends BaseController {
 	//accessing view from views/main/index (specify by main.index)
 	public function getMain()
 	{
-		return View::make('main.sparkhub');
+		$filter_type = Session::get('filter_type');
+		$filter_item = Session::get('filter_item');
+		$order_type = Session::get('order_type');
+		$order_AorD = Session::get('order_AorD'); 
+		$filtered=true;
+    	//FILTERS:
+    	//they picked a filter, value, order, and order value
+    	if(($filter_type != ("default_filter")) && ($filter_item != NULL) && ($order_type != ("default_sort")) && ($order_AorD != ("default_AorD"))
+    		&& Session::has('filter_type') && Session::has('filter_item') && Session::has('order_type') && Session::has('order_AorD')) 
+		{
+			//Filtering by industry
+			if($filter_type == "industry_filter")
+			{
+				$results = DB::table('ideas')->where('industry', '=', $filter_item)->orderBy($order_type, $order_AorD);	
+			}
+			//Filtering by keyword
+			else
+			{
+				//Find all the ideaID's of keywords that match from keyword table
+				$results = DB::table('ideas')
+					->join('keywords', 'ideas.id', '=', 'keywords.ideaID')
+					->where('keywords.keyword', '=', $filter_item)->orderBy($order_type, $order_AorD);
+			}
+		}
+		//They picked a filter and value but not order
+		else if(($filter_type != ("default_filter")) && ($filter_item != NULL) && Session::has('filter_type') && Session::has('filter_item'))
+		{
+			//Filtering by industry
+			if($filter_type == "industry_filter")
+			{
+				$results = DB::table('ideas')->where('industry', '=', $filter_item);	
+			}
+			//Filtering by keyword
+			else
+			{
+				//Find all the ideaID's of keywords that match from keyword table
+				$results = DB::table('ideas')
+					->join('keywords', 'ideas.id', '=', 'keywords.ideaID')
+					->where('keywords.keyword', '=', $filter_item);
+			}
+		}
+		//They picked an order and value but no filter
+		else if(($order_type != "default_sort") && ($order_AorD != "default_AorD") && Session::has('order_type') && Session::has('order_AorD'))
+		{
+			$results = DB::table('ideas')->orderBy($order_type, $order_AorD);
+		}
+		//They didn't pick a filter or order, get everything
+		else
+		{
+			$filtered=false;
+			$results = Idea::orderBy('created_at', 'DESC');
+		}
+
+		return View::make('main.sparkhub', array('orderedResults'=>$results, 'filtered'=>$filtered));
 	}
 
 	public function mySparks()
@@ -251,43 +304,19 @@ class SparkController extends BaseController {
 		$order_type = Input::get('order_type');
     	$order_AorD = Input::get('order_AorD');
 
-    	//they picked a filter and a value for it
-    	if(($filter_type != "default_filter") && ($filter_item != NULL)) 
-		{
-			//Filtering by industry
-			if($filter_type == "industry_filter")
-			{
-				$filtered_results = Idea::where('industry', '=', $filter_item)->get();	
-			}
-			//Filtering by keyword
-			else
-			{
-				//Find all the ideaID's of keywords that match from keyword table
-				$filtered_results = DB::table('ideas')
-					->join('keywords', 'ideas.id', '=', 'keywords.ideaID')
-					->where('keywords.keyword', '=', $filter_item)->get(['ideas.*']);
-			}
-		}
-		//They didn''t pick a filter, get everything
-		else
-		{
-			$filtered_results = Idea::get();
-		}
 
-		
+		Log::info('RIGHT BEFORE REDIRECT.');
 
-
-		$results = NULL;
-		return Redirect::to('/sparkhub')
-			->with('orderedResults', $results);
+		return Redirect::route('sparkhub-search')
+		->with('filter_type', $filter_type)
+		->with('filter_item', $filter_item)
+		->with('order_type', $order_type)
+		->with('order_AorD', $order_AorD);
 	}
-
 
 	public function clearFilter()
 	{
-		$results = NULL;
-		return Redirect::to('/sparkhub')
-			->with('orderedResults', $results);
+		return Redirect::route('sparkhub-search');
 	}
 
 

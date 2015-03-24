@@ -5,21 +5,14 @@
 
 <div class="withMsg">{{ $global }}</div><br />
 
-<?php $orderedResults = Session::get('orderedResults'); ?>
-
-
-@if($orderedResults == NULL)
-    <?php $results = Idea::orderBy('created_at', 'DESC'); ?>
-@else
-    <?php $results = $orderedResults; ?>
-@endif
-
 <?php 
+//dd($orderedResults); 
+
 //get the authenticated userID
 $id = Auth::id();
 
 //allow 10 sparks per page (can be adjusted once we format this)
-$pag_ideas = $results->paginate(10); 
+$pag_ideas = $orderedResults->paginate(10); 
 ?>
 
 <form method="post" novalidate>
@@ -35,13 +28,13 @@ $pag_ideas = $results->paginate(10);
         <div>Sort By:<name="orders">
                 <select name="order_type">
                     <option value="default_sort">Pick a way to sort..</option>
-                    <option value="name_sort">Name</option>
-                    <option value="date_sort">Date of Submission</option>
+                    <option value="title">Name</option>
+                    <option value="created_at">Date of Submission</option>
                 </select>
                 <select name="order_AorD">
                     <option value="default_AorD">Pick the order to be displayed..</option>
-                    <option value="name_sort">Descending</option>
-                    <option value="date_sort">Ascending</option>
+                    <option value="DESC">Descending</option>
+                    <option value="ASC">Ascending</option>
                 </select>
         </div>
         <input type="submit" value="Submit Filters/Ordering"/>
@@ -75,8 +68,12 @@ $pag_ideas = $results->paginate(10);
 
 <?php echo $pag_ideas->links(); ?>
 
-@if (!$results->count())
-	<div name="Nothing">It seems there are no Sparks! Spark up some of your own to inspire others!</div>
+@if (!$orderedResults->count())
+    @if(!$filtered)
+	   <div name="Nothing">It seems there are no Sparks! Spark up some of your own to inspire others!</div>
+    @else
+        <div name="FiltNothing">It seems that there are no Sparks that match your filter! Please try a different filter!</div>
+    @endif
 @endif
 
 </html>
