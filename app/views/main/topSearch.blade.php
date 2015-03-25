@@ -122,7 +122,7 @@
 					<option value="2015">2015</option>
 				</select> <br/>
 
-				Top <input type="number" min="1" name="topk"/> Ideas <?php echo $errors->create->first('topk'); ?> <br />
+				Top <input type="number" min="1" name="topk"/> Ideas <br />
 				<input type="submit" value="Search"/>
 			</div>
 		</form>

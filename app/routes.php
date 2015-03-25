@@ -114,7 +114,8 @@ Route::get('/clear_filters', array(
 
 Route::get('/top', array(
     'before' => 'auth|verified',
-    'uses' => 'TopController@getMain'));
+    'uses' => 'TopController@getMain',
+    'as' => 'searchTop'));
 
 Route::post('/top', array(
     'before' => 'auth|verified',
