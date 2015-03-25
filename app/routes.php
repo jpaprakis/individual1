@@ -126,6 +126,9 @@ Route::get('/topSparks', array(
     'uses' => 'TopController@getTop',
     'as' => 'getTop'));
 
+Route::get('/graph', array(
+    'before' => 'auth|verified',
+    'uses' => 'GraphController@getMain'));
 
 
 Route::post('/edit_profile', array(

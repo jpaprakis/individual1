@@ -72,6 +72,5 @@ the form code will have to be repeated on every html page. -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 {{ HTML::style('css/main.css'); }} 
-{{ HTML::script('js/main.js'); }}
 {{ HTML::script('js/bootstrap.min.js'); }}
 {{ HTML::script('https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'); }}
