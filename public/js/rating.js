@@ -10,7 +10,7 @@ function vote_up(ideaID) {
 }
 
 function vote_down(ideaID) {
-	$.post("/ratings/" + ideaID + "/-1", function(data){
+	$.post("/ratings/" + ideaID + "/0", function(data){
 		successHandler(data);
 	});
 }

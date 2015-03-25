@@ -319,5 +319,9 @@ class SparkController extends BaseController {
 		return Redirect::route('sparkhub-search');
 	}
 
+	public function searchTop()
+	{
+		return View::make('main.topSearch');
+	}
 
 }

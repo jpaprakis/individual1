@@ -112,6 +112,18 @@ Route::get('/clear_filters', array(
     'before' => 'auth|verified',
     'uses' => 'SparkController@clearFilter'));
 
+Route::get('/top', array(
+    'before' => 'auth|verified',
+    'uses' => 'TopController@getMain'));
+
+Route::post('/top', array(
+    'before' => 'auth|verified',
+    'uses' => 'TopController@showTop'));
+
+Route::get('/topSparks', array(
+    'before' => 'auth|verified',
+    'uses' => 'TopController@getTop',
+    'as' => 'getTop'));
 
 
 

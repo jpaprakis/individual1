@@ -37,6 +37,7 @@ this is how we get values/variables from a model (which will be calling our data
 
 		<li><a href="/sparkhub">Spark Hub</a></li>
 		<li><a href="/createspark">Create your own spark</a></li>
+		<li><a href="/top">Top sparks</a></li>
 <!-- This link should appear below the login form -->
 
 		
