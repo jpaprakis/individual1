@@ -39,12 +39,11 @@ class HomeController extends BaseController {
 
 		if (Auth::attempt(array('email' => $email, 'password' => $password)))
 		{
-    		return Redirect::to('/')
-    			->with('global', 'Congratulations you have successfully logged in!');
+    		return Redirect::to('/#index');
 		}	
 		else 
 		{
-			return Redirect::to('/')
+			return Redirect::to('/#index')
 				->with('global', 'Sorry that e-mail/password combination is incorrect!');
 		}
 
@@ -53,7 +52,7 @@ class HomeController extends BaseController {
 	public function onLogout()
 	{
 		Auth::logout();
-		return Redirect::to('/')
+		return Redirect::to('/#index')
 			->with('global', 'You have been successfully logged out!');
 	}
 

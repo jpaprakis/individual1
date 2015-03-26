@@ -3,7 +3,22 @@
 <!doctype html>
 <?php $global = Session::get('global'); ?>
 
+
+<link href="css/stylish-portfolio.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css" />
+
+<title>Top Spark Results | SparkUp</title>
+
+<div class="container">
+<p><a href="/top">Go back to Search Top Sparks</a></p>
 <div class="withMsg">{{ $global }}</div><br />
+<div class="page-header">
+        <span class="fa-stack fa-4x">
+            <i class="fa fa-arrow-up fa-stack-1x text-primary"></i>
+        </span>
+    <h1>Top Spark Results</h1>
+</div>
+</div>
 
 <?php 
 //get the authenticated userID
@@ -13,27 +28,19 @@ $pag_ideas = $orderedResults->paginate(10);
 
 <div class="container">
     <?php foreach ($pag_ideas as $idea): ?>
+        <?php $ideaID=$idea->id; ?>
+        <div class="col-lg-7 form-control">
         <p><?php echo $idea->title; ?>
-            <?php $ideaID=$idea->id; ?>
             <a href ="/view_idea/<?php echo $ideaID ?>">View</a>
             <!--Can view and edit your own sparks, even on the hub page-->
             @if ($idea->userID === $id)
                 <a href ="/edit_idea/<?php echo $ideaID ?>">Edit</a>
                 <a href ="/delete_idea/<?php echo $ideaID ?>">Delete</a>
-            
-            <!--If the sparks belong to someone else, can rate them-->
-            @else
-                <!--ADD LOGIC HERE TO SHOW A DIFF COLOUR IF ALRDY RATED-->
-                <p id="upvote" onclick="vote_up('{{ $ideaID }}')">Light</p>   
-                <p id="downvote" onclick="vote_down('{{ $ideaID }}')">Extinguish</p>
-
-            @endif </p>
-
-    
+            @endif
+        </div></br>
     <?php endforeach; ?>
-</div>
-
 <?php echo $pag_ideas->links(); ?>
+</div>
 
 
 <div class="resultDiv">Results in JSON Format: {{ $jsonResults }}</div>

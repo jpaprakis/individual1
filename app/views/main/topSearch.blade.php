@@ -10,7 +10,6 @@
 
 <div class="container">
 <p><a href="/sparkhub">Go back to Spark Hub</a></p>
-<div class="withMsg">{{ $global }}</div><br />
 <div class="page-header">
         <span class="fa-stack fa-4x">
             <i class="fa fa-arrow-up fa-stack-1x text-primary"></i>
@@ -21,6 +20,8 @@
 
 <!-- The Search Form -->
 <div class="search-form"><h4><span class="glyphicon glyphicon-search"></span> Search for Top Sparks</h4>
+	<div class="withMsg">{{ $global }}</div><br />
+
     <form method="post" novalidate>
         <div class="row">
         	<div class="col-lg-1">
