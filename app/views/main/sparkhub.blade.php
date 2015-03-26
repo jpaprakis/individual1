@@ -3,13 +3,13 @@
 <!doctype html>
 <?php $global = Session::get('global'); ?>
 
-<div class="withMsg">{{ $global }}</div><br />
 <link href="css/stylish-portfolio.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css" />
 
 <title>Spark Hub | SparkUp</title>
 
 <div class="container">
+<div class="withMsg">{{ $global }}</div><br />
 <div class="page-header">
         <span class="fa-stack fa-4x">
             <i class="fa fa-star fa-stack-1x text-primary"></i>
