@@ -43,7 +43,7 @@ Route::filter('auth', function()
 		}
 		else
 		{
-			return Redirect::guest('/')
+			return Redirect::guest('/#index')
 				->with('global', 'You must be logged in to access this page');
 		}
 	}
@@ -57,7 +57,7 @@ Route::filter('verified', function()
 		$founduser = User::where('userID', '=', $id)->first();
 		if (!$founduser->active)
 		{
-			return Redirect::to('/')
+			return Redirect::to('/#index')
 				->with('global', 'You must verify your account to access this page:');
 		}
 	}
@@ -82,7 +82,7 @@ Route::filter('auth.basic', function()
 
 Route::filter('guest', function()
 {
-	if (Auth::check()) return Redirect::to('/');
+	if (Auth::check()) return Redirect::to('/#index');
 });
 
 /*

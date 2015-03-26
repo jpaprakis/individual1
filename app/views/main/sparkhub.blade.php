@@ -4,73 +4,104 @@
 <?php $global = Session::get('global'); ?>
 
 <div class="withMsg">{{ $global }}</div><br />
+<link href="css/stylish-portfolio.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css" />
+
+<title>Spark Hub | SparkUp</title>
+
+<div class="container">
+<div class="page-header">
+        <span class="fa-stack fa-4x">
+            <i class="fa fa-star fa-stack-1x text-primary"></i>
+        </span>
+    <h1>Spark Hub</h1>
+</div>
+</div>
+
+
+
+<!-- The Search Form -->
+  <div class="search-form"><h4><span class="glyphicon glyphicon-search"></span> Search for Sparks</h4>
+    <form method="post" novalidate>
+        <div class="row">
+            <div class="col-lg-5">
+              <select class="form-control" name="filter_type">
+                    <option value="default_filter">Pick a filter..</option>
+                    <option value="industry_filter">Industry</option>
+                    <option value="keyword_filter">Keyword</option>
+              </select>
+            </div>
+            <div class="col-lg-7">
+                <input class="form-control" type="text" size="30" maxlength="60" name="filter_value" placeholder="Enter Filter Keyword"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-5">
+              <select class="form-control" name="order_type">
+                    <option value="default_sort">Pick a way to sort..</option>
+                    <option value="title">Name</option>
+                    <option value="created_at">Date of Submission</option>
+              </select>
+            </div>
+            <div class="col-lg-7">
+              <select class="form-control" name="order_AorD">
+                    <option value="default_AorD">Pick the order to be displayed..</option>
+                    <option value="DESC">Descending</option>
+                    <option value="ASC">Ascending</option>
+              </select>
+            </div>
+        </div>
+          <input class="btn btn-primary" type="submit" value="Submit Filters/Ordering"/>
+    </form>
+    <form action="/clear_filters" method="get">
+        <input class="btn btn-primary" type="submit" value="Clear Filters/Ordering"/>
+    </form>
+  </div>
 
 <?php 
-//dd($orderedResults); 
 
 //get the authenticated userID
 $id = Auth::id();
 
-//allow 10 sparks per page (can be adjusted once we format this)
+//allow 10 sparks per page
 $pag_ideas = $orderedResults->paginate(10); 
 ?>
 
-<form method="post" novalidate>
-    <div>
-        <div>Filter By:<name="filters">
-                <select name="filter_type">
-                    <option value="default_filter">Pick a filter..</option>
-                    <option value="industry_filter">Industry</option>
-                    <option value="keyword_filter">Keyword</option>
-                </select>
-                <input type="text" size="30" maxlength="60" name="filter_value"/><br />
-        </div>
-        <div>Sort By:<name="orders">
-                <select name="order_type">
-                    <option value="default_sort">Pick a way to sort..</option>
-                    <option value="title">Name</option>
-                    <option value="created_at">Date of Submission</option>
-                </select>
-                <select name="order_AorD">
-                    <option value="default_AorD">Pick the order to be displayed..</option>
-                    <option value="DESC">Descending</option>
-                    <option value="ASC">Ascending</option>
-                </select>
-        </div>
-        <input type="submit" value="Submit Filters/Ordering"/>
-    </div>
-</form>
-<form action="/clear_filters" method="get">
-    <input type="submit" value="Clear Filters/Ordering"/>
-</form>
 
 <div class="container">
     <?php foreach ($pag_ideas as $idea): ?>
-        <p><?php echo $idea->title; ?>
-        	<?php $ideaID=$idea->id; ?>
-        	<a href ="/view_idea/<?php echo $ideaID ?>">View</a>
-        	<!--Can view and edit your own sparks, even on the hub page-->
-        	@if ($idea->userID === $id)
-				<a href ="/edit_idea/<?php echo $ideaID ?>">Edit</a>
-        		<a href ="/delete_idea/<?php echo $ideaID ?>">Delete</a>
-			
-			<!--If the sparks belong to someone else, can rate them-->
-			@else
-                <!--ADD LOGIC HERE TO SHOW A DIFF COLOUR IF ALRDY RATED-->
-                <p id="upvote" onclick="vote_up('{{ $ideaID }}')">Light</p>   
-                <p id="downvote" onclick="vote_down('{{ $ideaID }}')">Extinguish</p>
-
-			@endif </p>
+        <?php $ideaID=$idea->id; ?>
+    <div class="col-lg-7 form-control">
+        <label id="each_spark">
+            @if (!($idea->userID === $id))
+                <span id="votes" onclick="clearColour(this)">
+                    <i class="fa fa-fire" id="upvote" class="vote" onclick="vote_up('{{ $ideaID }}', this)"></i>
+                    <i class="fa fa-fire-extinguisher" id="downvote" class="vote" onclick="vote_down('{{ $ideaID }}', this)"></i>
+                </span>
+            @endif
+            <p id="spark_title" placeholder="want_some_icons"/><?php echo $idea->title; ?>
+        </label>
+            <a href ="/view_idea/<?php echo $ideaID ?>">View</a>
+            <!--Can view and edit your own sparks, even on the hub page-->
+            @if ($idea->userID === $id)
+                <a href ="/edit_idea/<?php echo $ideaID ?>">Edit</a>
+                <a href ="/delete_idea/<?php echo $ideaID ?>">Delete</a>
+            @endif
+            </p>
+    </div></br>
 
     
     <?php endforeach; ?>
+
+<span><?php echo $pag_ideas->links(); ?></span>
+
 </div>
 
-<?php echo $pag_ideas->links(); ?>
 
 @if (!$orderedResults->count())
     @if(!$filtered)
-	   <div name="Nothing">It seems there are no Sparks! Spark up some of your own to inspire others!</div>
+       <div name="Nothing">It seems there are no Sparks! Spark up some of your own to inspire others!</div>
     @else
         <div name="FiltNothing">It seems that there are no Sparks that match your filter! Please try a different filter!</div>
     @endif

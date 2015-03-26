@@ -82,7 +82,7 @@ class NewUserController extends BaseController {
     			$message->to($user->email, $user->userID)->subject('Activate your SparkUp account');	
     		});
 
-    		return Redirect::to('/')
+    		return Redirect::to('/#index')
     			->with('global', 'Congratulations, your account has been created! Please check your e-mail for the activation link.');
     	}
 
@@ -104,13 +104,13 @@ class NewUserController extends BaseController {
 			$user->code = '';
 
 			if ($user->save()) {
-				return Redirect::to('/sparkhub')
-					->with('global', 'Your account has been activated! You may now sign in.');
+				return Redirect::to('/#index')
+					->with('global', 'Your account has been activated!');
 			}
 
 		}
 
-		return Redirect::to('/')
+		return Redirect::to('/#index')
 			->with('global', 'Sorry, we could not activate your account.');
 	}
 
@@ -121,7 +121,7 @@ class NewUserController extends BaseController {
 	
 		if (!$id) 
 		{
-			return Redirect::to('/')
+			return Redirect::to('/#index')
 				->with('global', 'Please sign in before you can recieve the activation e-mail');
 		}
 
@@ -134,7 +134,7 @@ class NewUserController extends BaseController {
     		$message->to($user->email, $user->userID)->subject('Activate your SparkUp account');	
     	});
 
-    	return Redirect::to('/')
+    	return Redirect::to('/#index')
     		->with('global', 'Your activation link has been re-sent, please check your e-mail.');
 	}
 

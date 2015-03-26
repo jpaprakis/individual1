@@ -28,3 +28,6 @@ textarea{
 h1{
 	margin-left: 5%;
 }
+.well {
+   background-color: rgba(245, 245, 245, 0.4);
+}

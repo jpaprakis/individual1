@@ -1,0 +1,58 @@
+.bluenav {
+	background-color: #337ab7 !important;
+  	border-color: #337ab7!important;
+  	color:#337ab7!important;
+}
+
+.navname {
+	color:#fff !important;
+}
+
+.hubname{
+	color:#fff !important;
+}
+
+.submitter{
+	background-color: #337ab7;
+	border-color: #337ab7;
+}
+
+.errmessage{
+	color:red;
+}
+
+#each_spark{
+	position: relative;
+}
+
+
+#spark_title{
+    padding-left: 30px;
+}
+
+#each_spark .fa-fire {
+    color: #666;
+    top: 2px !important;
+    left: -5px !important;
+    position: absolute;
+    height:15px;
+    width:15px;
+    z-index: 5;
+    cursor:pointer;
+}
+
+#each_spark .fa-fire.active {
+	color:red;
+}
+
+#each_spark .fa-fire-extinguisher {
+    color: #666;
+    top: 2px !important;
+    left: 15px !important;
+    position: absolute;
+    height:15px;
+    width:15px;
+    z-index: 5;
+    cursor:pointer;
+
+}
