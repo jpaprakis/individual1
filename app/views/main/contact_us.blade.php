@@ -1,32 +1,68 @@
 @extends('layouts/main')
 
-<?php $global = Session::get('global'); ?>
-
 <!DOCTYPE html>
 <html>
+<head>
+    <meta charset="utf-8" />
+    <title>Register | SparkUp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css" />
+
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+</head>
 <body>
 
-<!-- 	Everything above this line is part of the basic layout. Please keep it same throughout each file.
- -->
- 	<div class="jumbotron">
-	<section>
-		<h1>Contact Us</h1>
-		<p>Call us toll free at 1-888-555-5555.</p>
-		<p>Or send us an email:</p>
-		<p>
-			<form method="post">
-				<div>
-					Your Email Address <input type="email" size="70" name="sender_email" /> <br />
-					Subject <input type="text" size="80" name="email_subject"/> <br />
-					<textarea name="message" rows="10" cols="80" placeholder="Type your message here."></textarea> <br />
-					<input type="submit" value="Send" />
-					<div class="withMsg">{{ $global }}</div>
-				</div>
-			</form>
-		</p>
-	</section>
-    </div>
+<?php $global = Session::get('global'); ?>
+
+
+<div class="container">
+<div class="withMsg">{{ $global }}</div>
+
+<div class="page-header">
+	<div class="service-item">
+	    <span class="fa-stack fa-4x">
+		    <i class="fa fa-comment fa-stack-1x text-primary"></i>
+		</span>
+	</div>
+
+    <h1>Contact Us</h1>
+</div>
+
+<!-- Registration form - START -->
+<div class="container">
+    <div class="row">
+        <form role="form" method="post" novalidate>
+            <div class="col-lg-6">
+                <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Required Field</strong></div>
+                <div class="form-group">
+                    <label for="UserID">Email Address</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="email" id="email" placeholder="Enter Your Email" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div><p class="errmessage"><?php echo $errors->login->first('user_ID'); ?></p>
+                </div>
+                <div class="form-group">
+                    <label for="Fname">Subject</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter Subject" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div><p class="errmessage"><?php echo $errors->login->first('first_name'); ?></p>
+                </div>
+				<div class="form-group">
+                    <label for="InputDesc">Message</label>
+                    <div class="input-group">
+                        <textarea name="message" id="message" placeholder="Enter Your Message Here" class="form-control" rows="5" required></textarea>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div><p class="errmessage"><?php echo $errors->create->first('description'); ?></p>
+                </div>
+               <input type="submit" id="submit" value="Send Message" class="btn btn-info pull-right submitter">
+            </div>
+        </form>
+	</div>
+</div>
 
 </body>
 

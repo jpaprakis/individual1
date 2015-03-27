@@ -76,8 +76,25 @@ $pag_ideas = $orderedResults->paginate(10);
         <label id="each_spark">
             @if (!($idea->userID === $id))
                 <span id="votes" onclick="clearColour(this)">
-                    <i class="fa fa-fire" id="upvote" class="vote" onclick="vote_up('{{ $ideaID }}', this)"></i>
-                    <i class="fa fa-fire-extinguisher" id="downvote" class="vote" onclick="vote_down('{{ $ideaID }}', this)"></i>
+                    <?php $upRating = Rating::where('raterID', '=', $id)
+                                        ->where('ideaID', '=', $idea->id)
+                                        ->where('rating', '=', 1)->first();
+                        $downRating = Rating::where('raterID', '=', $id)
+                        ->where('ideaID', '=', $idea->id)
+                        ->where('rating', '=', 0)->first();
+                    
+                    $upcol = "";
+                    $downcol = ""; ?>
+                    @if(isset($upRating))
+                        <i class="fa fa-fire vote" style="color:red;" id="upvote{{$ideaID}}" onclick="vote_up('{{ $ideaID }}', this)"></i>
+                    @else
+                        <i class="fa fa-fire vote" id="upvote{{$ideaID}}" onclick="vote_up('{{ $ideaID }}', this)"></i>
+                    @endif
+                     @if(isset($downRating))
+                         <i class="fa fa-fire-extinguisher vote" style="color:red;" id="downvote{{$ideaID}}" onclick="vote_down('{{ $ideaID }}', this)"></i>
+                    @else
+                        <i class="fa fa-fire-extinguisher vote" id="downvote{{$ideaID}}" onclick="vote_down('{{ $ideaID }}', this)"></i>
+                    @endif
                 </span>
             @endif
             <p id="spark_title" placeholder="want_some_icons"/><?php echo $idea->title; ?>

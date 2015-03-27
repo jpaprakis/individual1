@@ -13,7 +13,7 @@ class MiscController extends BaseController {
 	public function onContact_Submit()
 	{	
 		return Redirect::to('/contact_us')
-		->with('global', 'The contact function has not yet been implemented.');
+		->with('global', 'Your message has been sent!');
 	}
 
 

@@ -5,20 +5,16 @@
 
 function vote_up(ideaID, item) {
 	$.post("/ratings/" + ideaID + "/1", function(data){
-		successHandler(data);
-		item.style.color="red";
+		$("#upvote"+ideaID).attr('style', 'color:red');
+		$("#downvote"+ideaID).attr('style', 'color:gray');
 	});
 }
 
 function vote_down(ideaID, item) {
 	$.post("/ratings/" + ideaID + "/0", function(data){
-		successHandler(data);
-		item.style.color="red";
+		$("#upvote"+ideaID).attr('style', 'color:gray');
+		$("#downvote"+ideaID).attr('style', 'color:red');
 	});
-}
-
-function successHandler(data){
-	console.log(data);
 }
 
 function clearColour(span){
