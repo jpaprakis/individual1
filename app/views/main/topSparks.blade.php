@@ -30,7 +30,8 @@ $pag_ideas = $orderedResults->paginate(10);
     <?php foreach ($pag_ideas as $idea): ?>
         <?php $ideaID=$idea->id; ?>
         <div class="col-lg-7 form-control">
-        <p><?php echo $idea->title; ?>
+        <?php $idea_rating = Rating::where('ideaID', '=', $ideaID)->sum('rating') ?>
+        <p><span id="number_rating">{{$idea_rating   }}</span> <?php echo $idea->title; ?>
             <a href ="/view_idea/<?php echo $ideaID ?>">View</a>
             <!--Can view and edit your own sparks, even on the hub page-->
             @if ($idea->userID === $id)

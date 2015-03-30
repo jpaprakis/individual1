@@ -77,7 +77,7 @@ $pag_ideas = $orderedResults->paginate(10);
             @if (!($idea->userID === $id))
                 <span id="votes" onclick="clearColour(this)">
                     <?php $upRating = Rating::where('raterID', '=', $id)
-                                        ->where('ideaID', '=', $idea->id)
+                                           ->where('ideaID', '=', $idea->id)
                                         ->where('rating', '=', 1)->first();
                         $downRating = Rating::where('raterID', '=', $id)
                         ->where('ideaID', '=', $idea->id)
@@ -97,7 +97,9 @@ $pag_ideas = $orderedResults->paginate(10);
                     @endif
                 </span>
             @endif
-            <p id="spark_title" placeholder="want_some_icons"/><?php echo $idea->title; ?>
+            <?php 
+                $idea_rating = Rating::where('ideaID', '=', $idea->id)->sum('rating')?>
+            <p id="spark_title" placeholder="want_some_icons"/><span id="number_rating{{$ideaID}}">{{$idea_rating   }}</span> {{   $idea->title}}</p>
         </label>
             <a href ="/view_idea/<?php echo $ideaID ?>">View</a>
             <!--Can view and edit your own sparks, even on the hub page-->
